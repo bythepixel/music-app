@@ -8,11 +8,12 @@
 
 	<link rel="stylesheet" href="https://use.typekit.net/ufb3jbs.css">
 	<link rel="stylesheet" href="{{ mix('/css/app.css') }}">
-	<link rel="stylesheet" href="{{ mix('/js/app.js') }}">
+	<script type="text/javascript" src="{{ mix('/js/app.js') }}" async></script>
 </head>
 
 <body>
-	<h1>Hello, World!</h1>	
+	<h1>Hello, World!</h1>
+	<div id="app"></div>
 </body>
 
 </html>
