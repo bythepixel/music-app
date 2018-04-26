@@ -1,4 +1,18 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+	<title>Music App</title>
+	<meta name="description" content="Music App">
 
-'hello world'
+	<link rel="stylesheet" href="https://use.typekit.net/ufb3jbs.css">
+	<link rel="stylesheet" href="{{ mix('/css/app.css') }}">
+	<link rel="stylesheet" href="{{ mix('/js/app.js') }}">
+</head>
 
-{{ mix('/css/app.css') }}
+<body>
+	<h1>Hello, World!</h1>	
+</body>
+
+</html>
