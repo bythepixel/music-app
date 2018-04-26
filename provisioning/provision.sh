@@ -133,5 +133,7 @@ sudo a2enmod \
     headers \
     rewrite
 
+sudo a2ensite 000-default.conf
+
 echo "Restart both services"
 sudo service apache2 restart
