@@ -1,0 +1,9 @@
+.DS_Store
+.idea
+.vscode
+.vagrant
+.env
+node_modules
+npm-debug.log
+mix-manifest.json
+*.log

@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+cd /srv/www
+
+composer install
+
+npm install
