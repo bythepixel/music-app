@@ -61,6 +61,9 @@ sudo apt-get install php7.2-mysql -y > /dev/null
 echo "Install PHP-MBSTRING"
 sudo apt-get install php7.2-mbstring -y > /dev/null
 
+echo "Install PHP-ZIP"
+sudo apt-get install php7.2-zip -y > /dev/null
+
 echo "Install composer globally"
 curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer
 
