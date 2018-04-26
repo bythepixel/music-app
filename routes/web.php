@@ -11,6 +11,4 @@
 |
 */
 
-Route::get('/', function () {
-    return 'hello world!';
-});
+Route::get('/', 'ClientController@index');
