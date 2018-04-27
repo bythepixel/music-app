@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Events\PlayerPause;
 use App\Events\PlayerPlay;
+use App\Events\PlayerPlayTrack;
 use App\Events\TestEvent;
 use Illuminate\Cache\Repository;
 use Illuminate\Foundation\Bus\DispatchesJobs;
@@ -68,6 +69,18 @@ class PlayerController extends BaseController
         $cache->put('player.state', 'playing');
 
         event(new PlayerPlay());
+
+        return response()->json(['success' => true]);
+    }
+
+    public function playTrack(SpotifyWebAPI $spotifyWebAPI, Repository $cache, Request $request)
+    {
+        $spotifyWebAPI->play(self::DEVICE_ID, [
+            'context_uri' => 'spotify:user:' . $spotifyWebAPI->me()->id . ':playlist:' . $this->getPlaylistId($spotifyWebAPI, $cache),
+            'offset' => ['uri' => 'spotify:track:' . $request->get('id')]
+        ]);
+
+        event(new PlayerPlayTrack($request->get('id')));
 
         return response()->json(['success' => true]);
     }
