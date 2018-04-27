@@ -5,6 +5,7 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 const Vue = require('vue');
+const Vuex = require('vuex');
 const axios = require('axios');
 
 /**
@@ -13,7 +14,7 @@ const axios = require('axios');
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-const spotifyKey = 'BQBuvOivp0Cmswf-_pPl0dsKLTwkVkI3v6T9IXN8UfBwkpFLqTWRgg6sWjhuKAbA_FtFjjEsS4hsQIGlQFEFX7aCpIm25M5tgjsUyHcW-d_6PRGXxgJsw6NNAp7uiEAYOnHmXAWEfQIrApCnLa71Hab2fNYt-XK_YO8DpgeXUiWT1pYPDSxPgIab5kAPnEypQx9TGtAszDwsoi7Kk5uyJGhevHDNV9DigHuphpPnnkAgNfCT9IAoNFrQ5xqZy-iKFnStw2jMX9Ay1xsr5KzEcvpKmRg';
+const spotifyKey = 'BQCCSwzQ8hZX4bnPjxJj822N73wNtoDXVWwe2od0IBZIFsKHEPgs3404gY6HCdxez8dtMrH8dwhaoCh0sh4jy4bneCblSdjEwZWDheokFe4SEk5cJghwCZf_HYbRGZf_K_kAAEOdPMp2kJ94QgEVzdpPsjAauVbwyvNlh3cdiftM7pempB5FYV2L6zd62soFOj6Jf67svPCLjUP1UOFpMU-eSRi1JDoTxlVAIhnjUu2idQ0yWUZv5EwaCfNWg-zXIzenpdOUZMzxBoF6gqlsZ10MlSs';
 const spotifyHttp = axios.create({
   baseURL: 'https://api.spotify.com/v1/',
   headers: {
@@ -23,12 +24,55 @@ const spotifyHttp = axios.create({
 
 Vue.prototype.$http = axios;
 Vue.prototype.$spotifyHttp = spotifyHttp;
+Vue.use(Vuex);
 
-Vue.component('example-component', require('./components/ExampleComponent.vue'));
+Vue.component('core-comp', require('./components/Core.vue'));
+
+const store = new Vuex.Store({
+  
+  state: {
+    isPlaying: false,
+    currentPlaylist: [],
+  },
+  
+  mutations: {
+    play (state) {
+      state.isPlaying = true;
+    },
+    pause (state) {
+      state.isPlaying = false;
+    },
+    setPlaylist (state, playList) {
+      state.currentPlaylist = playList;
+    },
+  },
+  
+  actions: {
+    getPlaylist({ commit }) {
+      commit('setPlaylist');
+
+      spotifyHttp
+        .get('search', {
+          params: {
+            q: 'u2',
+            type: 'track',
+          },
+        })
+        .then(res => {
+          commit('setPlaylist', res.data.tracks.items);
+        });
+
+    },
+  },
+
+});
+
+store.dispatch('getPlaylist');
 
 const app = new Vue({
   el: '#app',
+  store,
   template: `
-    <example-component />
+    <core-comp />
   `,
 });

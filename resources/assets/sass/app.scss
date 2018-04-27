@@ -1,6 +1,9 @@
-// Variables
-@import "variables";
+@import 'reset';
+@import "variables/variables";
 
 html {
   font-family: 'aktiv-grotesk', sans-serif;
+	background-color: $color__bg-color;
+	color: invert($color__bg-color);
 }
+
