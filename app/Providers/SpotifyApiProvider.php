@@ -14,7 +14,6 @@ class SpotifyApiProvider extends ServiceProvider
     {
         $this->app->singleton(SpotifyWebAPI::class, function ($app) {
 
-
             $cache = $app->make(Repository::class);
 
             // figure out of access token has expired
@@ -22,6 +21,9 @@ class SpotifyApiProvider extends ServiceProvider
             if((time() - 10) > $cache->get('accessTokenExpiration')) {
                 $spotifySession = $app->make(Session::class);
                 $spotifySession->refreshAccessToken($cache->get('refreshToken'));
+
+                $cache->put('accessToken', $spotifySession->getAccessToken(), 9999999);
+                $cache->put('accessTokenExpiration', $spotifySession->getTokenExpiration(), 9999999);
             }
 
             $api = new SpotifyWebAPI();
