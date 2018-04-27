@@ -17,6 +17,7 @@
 <script>
 import FontAwesomeIcon from '@fortawesome/vue-fontawesome';
 import TrackListing from './TrackListing';
+import { mapActions } from 'vuex';
 export default {
 
   name: 'Searchbar',
@@ -34,18 +35,12 @@ export default {
   },
 
   methods: {
+    ...mapActions([
+      'getSearchResults',
+    ]),
     search(e) {
       e.preventDefault();
-      this.$spotifyHttp
-        .get('search', {
-          params: {
-            q: this.query,
-            type: 'track',
-          },
-        })
-        .then(res => {
-          this.tracks = res.data.tracks.items;
-        });
+      this.getSearchResults(this.query);
     },
   },
 

@@ -1,6 +1,7 @@
 <template>
   <div class="app-layout">
     <Searchbar class="header" />
+    <SearchResults v-if="searchResults.length >= 1" class="search-results" />
     <Playlist class="main-view" />
     <PlayerControls class="controls" />
   </div>
@@ -10,6 +11,8 @@
 import PlayerControls from './PlayerControls';
 import Searchbar from './Searchbar';
 import Playlist from './Playlist';
+import SearchResults from './SearchResults';
+import { mapState } from 'vuex';
 
 export default {
   name: 'HelloWorld',
@@ -18,6 +21,13 @@ export default {
     PlayerControls,
     Searchbar,
     Playlist,
+    SearchResults,
+  },
+
+  computed: {
+    ...mapState({
+      searchResults: state => state.searchResults,
+    }),
   },
 
 };
@@ -26,6 +36,7 @@ export default {
 <style scoped>
 
   .app-layout {
+    overflow: hidden;
     height: 100vh;
     width: 100vw;
     display: grid;
@@ -37,16 +48,23 @@ export default {
   }
 
   .header {
-    grid-area: "header";
+    grid-area: header;
   }
 
   .main-view {
-    grid-area: "main-view";
-    overflow: scroll;
+    grid-area: main-view;
+    overflow-y: scroll;
+    position: relative;
   }
 
   .controls {
-    grid-area: "controls";
+    grid-area: controls;
+  }
+
+  .search-results {
+    z-index: 10;
+    grid-area: main-view controls;
+    overflow-y: scroll;
   }
 
 </style>

@@ -35,6 +35,7 @@ const store = new Vuex.Store({
   state: {
     isPlaying: false,
     currentPlaylist: [],
+    searchResults: [],
   },
   
   mutations: {
@@ -47,23 +48,21 @@ const store = new Vuex.Store({
     setPlaylist (state, playList) {
       state.currentPlaylist = playList;
     },
+    setSearchResults (state, tracks) {
+      state.searchResults = tracks;
+    },
   },
   
   actions: {
     getPlaylist({ commit }) {
-      commit('setPlaylist');
-
       SpotifyService
-        .get('search', {
-          params: {
-            q: 'u2',
-            type: 'track',
-          },
-        })
-        .then(res => {
-          commit('setPlaylist', res.data.tracks.items);
-        });
-
+        .search('u2')
+        .then(tracks => commit('setPlaylist', tracks));
+    },
+    getSearchResults({ commit }, query) {
+      SpotifyService
+        .search(query)
+        .then(tracks => commit('setSearchResults', tracks));
     },
   },
 

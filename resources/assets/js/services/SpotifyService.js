@@ -1,10 +1,33 @@
 const axios = require('axios');
 
-const spotifyHttp = axios.create({
+const spotifyInstance = axios.create({
   baseURL: 'https://api.spotify.com/v1/',
   headers: {
     Authorization: `Bearer ${document.querySelector('body').dataset.accessToken}`,
   },
 });
 
-export default spotifyHttp;
+function search(query) {
+  return spotifyInstance
+    .get('search', {
+      params: {
+        q: query,
+        type: 'track',
+      },
+    })
+    .then(res => {
+      return res.data.tracks.items;
+    })
+    .catch(err => {
+      const error = err.response.data.error;
+      if (error.status === 401 && error.message === 'The access token expired') {
+        axios.get('/spotifyAuth/refreshAccessToken').then(res => {
+          console.log(res);
+        });
+      }
+    });
+}
+
+export default {
+  search,
+};

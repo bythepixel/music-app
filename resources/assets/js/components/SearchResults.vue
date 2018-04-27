@@ -1,6 +1,5 @@
 <template>
   <div>
-    <div class="list-counter">{{ songList.length }} songs</div>
     <ul>
       <TrackListing v-for="track in songList" :key="track.id" :track="track" />
     </ul>
@@ -13,7 +12,7 @@ import TrackListing from './TrackListing';
 
 export default {
 
-  name: 'PlayerControls',
+  name: 'SearchResults',
 
   components: {
     TrackListing,
@@ -21,7 +20,7 @@ export default {
 
   computed: {
     ...mapState({
-      songList: state => state.currentPlaylist,
+      songList: state => state.searchResults,
     }),
   },
 

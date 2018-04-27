@@ -50,7 +50,8 @@ export default {
   border-bottom: 1px solid $color__bg-color;
   color: invert($color__bg-color);
 
-  padding: 1rem 0.5rem;
+  padding: 0.75rem 0.5rem;
+  font-size: 0.9em;
 }
 
 .search__result span {
@@ -58,12 +59,13 @@ export default {
 }
 
 .track__artist-name {
+  font-size: 0.9em;
   color: darken(invert($color__bg-color), 20%);
 }
 
 .track__image {
   border-radius: 50%;
-  flex: 0 1 4em;
+  flex: 0 1 3em;
   margin-right: 1rem;
 }
 
