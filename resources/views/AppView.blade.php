@@ -11,7 +11,7 @@
 	<script type="text/javascript" src="{{ mix('/js/app.js') }}" async></script>
 </head>
 
-<body>
+<body data-access-token="{{ $accessToken }}" data-access-token-expiration="{{ $accessTokenExpiration }}">
 	<h1>Hello, World!</h1>
 	<div id="app"></div>
 </body>
