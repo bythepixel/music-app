@@ -22,7 +22,7 @@ function search(query) {
       const error = err.response.data.error;
       if (error.status === 401 && error.message === 'The access token expired') {
         axios.get('/api/spotifyAuth/refreshAccessToken').then(res => {
-          console.log(res);
+          console.error(res);
         });
       }
     });

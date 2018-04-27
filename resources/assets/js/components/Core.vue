@@ -30,6 +30,11 @@ export default {
     }),
   },
 
+  created() {
+    this.$Echo.channel('music-app')
+      .listen('.my-event', e => console.log(e));
+  },
+
 };
 </script>
 

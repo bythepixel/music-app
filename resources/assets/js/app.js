@@ -7,7 +7,21 @@
 const Vue = require('vue');
 const Vuex = require('vuex');
 const axios = require('axios');
+import Pusher from "pusher-js";
+import Echo from 'laravel-echo';
+
+// Services
 import SpotifyService from './services/SpotifyService';
+
+
+window.Echo = new Echo({
+  broadcaster: 'pusher',
+  key: '36c6686c75302a5ea911',
+  cluster: 'us2',
+});
+
+
+
 
 /**
  * Add All FontAwesome Solid Icons.
@@ -23,10 +37,11 @@ fontawesome.library.add(solid);
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
+Vue.use(Vuex);
+
 Vue.prototype.$http = axios;
 Vue.prototype.$spotifyHttp = SpotifyService;
-
-Vue.use(Vuex);
+Vue.prototype.$Echo = window.Echo;
 
 Vue.component('core-comp', require('./components/Core.vue'));
 
@@ -60,6 +75,9 @@ const store = new Vuex.Store({
   },
   
   actions: {
+    setPlaylist({ commit }, tracks) {
+      commit('setPlaylist', tracks);
+    },
     getPlaylist({ commit }) {
       SpotifyService
         .search('u2')
@@ -70,11 +88,21 @@ const store = new Vuex.Store({
         .search(query)
         .then(tracks => commit('setSearchResults', tracks));
     },
+    play({ commit }) {
+      axios.get('/api/player/play').then(() => {
+        commit('play');
+      });
+    },
+    pause({ commit }) {
+      axios.get('/api/player/pause').then(() => {
+        commit('pause');
+      });
+    },
   },
 
 });
 
-store.dispatch('getPlaylist');
+// store.dispatch('getPlaylist');
 
 const app = new Vue({
   el: '#app',

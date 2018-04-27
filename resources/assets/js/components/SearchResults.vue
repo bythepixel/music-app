@@ -1,7 +1,7 @@
 <template>
   <div>
     <ul>
-      <TrackListing v-for="track in songList" :key="track.id" :track="track" />
+      <TrackListing v-for="track in songList" :key="track.id" :track="track.track" />
     </ul>
   </div>
 </template>

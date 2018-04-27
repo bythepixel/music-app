@@ -2,13 +2,14 @@
   <div>
     <div class="list-counter">{{ songList.length }} songs</div>
     <ul>
-      <TrackListing v-for="track in songList" :key="track.id" :track="track" />
+      <TrackListing v-for="track in songList" :key="track.id" :track="track.track" />
     </ul>
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex';
+import { mapActions } from 'vuex';
 import TrackListing from './TrackListing';
 
 export default {
@@ -23,6 +24,19 @@ export default {
     ...mapState({
       songList: state => state.currentPlaylist,
     }),
+  },
+
+  methods: {
+    ...mapActions([
+      'setPlaylist',
+    ]),
+  },
+
+  created() {
+    this.$http.get('/api/player/getPlaylist')
+      .then(res => {
+        this.setPlaylist(res.data.items);
+      });
   },
 
 };

@@ -8,7 +8,7 @@
 
 <script>
 import { mapState } from 'vuex';
-import { mapMutations } from 'vuex';
+import { mapActions } from 'vuex';
 
 export default {
 
@@ -27,7 +27,6 @@ export default {
     }),
     backgroundImage() {
       if (this.isPlaying && this.currentTrack) {
-        console.log(`"url${this.currentTrack.album.images[0].url}"`)
         return {
           backgroundImage: `url("${this.currentTrack.album.images[0].url}")`,
         };
@@ -36,7 +35,7 @@ export default {
   },
 
   methods: {
-    ...mapMutations([
+    ...mapActions([
       'pause',
       'play',
     ]),
