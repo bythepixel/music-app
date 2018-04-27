@@ -12,3 +12,5 @@ Route::get('/player/pause', 'Api\PlayerController@pause');
 
 Route::get('/spotifyAuth', 'Api\SpotifyAuthController@index');
 Route::get('/spotifyAuth/processAuthCallback', 'Api\SpotifyAuthController@processAuthCallback');
+
+Route::get('/spotifyAuth/getNewAccessCode', 'Api\SpotifyAuthController@getNewAccessCode');

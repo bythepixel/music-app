@@ -20,8 +20,3 @@ class SpotifySessionProvider extends ServiceProvider
         });
     }
 }
-
-
-
-
-
