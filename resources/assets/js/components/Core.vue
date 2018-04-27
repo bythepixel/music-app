@@ -3,7 +3,7 @@
     <Searchbar class="header" />
     <SearchResults v-if="searchResults.length >= 1" class="search-results" />
     <Playlist class="main-view" />
-    <PlayerControls class="controls" />
+    <PlayerControls v-if="searchResults.length === 0" class="controls" />
   </div>
 </template>
 
@@ -63,7 +63,7 @@ export default {
 
   .search-results {
     z-index: 10;
-    grid-area: main-view controls;
+    grid-area: main-view;
     overflow-y: scroll;
   }
 

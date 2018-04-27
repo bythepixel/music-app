@@ -21,7 +21,7 @@ function search(query) {
     .catch(err => {
       const error = err.response.data.error;
       if (error.status === 401 && error.message === 'The access token expired') {
-        axios.get('/spotifyAuth/refreshAccessToken').then(res => {
+        axios.get('/api/spotifyAuth/refreshAccessToken').then(res => {
           console.log(res);
         });
       }

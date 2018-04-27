@@ -1,6 +1,6 @@
 <template>
   <div>
-    <form class="search" @submit="search">
+    <form class="search" @submit.prevent="search">
       <font-awesome-icon icon="search" class="search__icon" />
       <input class="search__input"
         type="search"
@@ -38,8 +38,7 @@ export default {
     ...mapActions([
       'getSearchResults',
     ]),
-    search(e) {
-      e.preventDefault();
+    search() {
       this.getSearchResults(this.query);
     },
   },

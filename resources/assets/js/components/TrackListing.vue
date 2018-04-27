@@ -1,20 +1,16 @@
 <template>
-  <div class="search__result">
+  <div class="search__result" @click="playTrack(track)">
     <img class="track__image" :src="track.album.images[0].url" >
     <div>
       <div class="track__name">{{ track.name }}</div>
       <div class="track__artist-name">{{ track.artists[0].name }}</div>
     </div>
     
-    <audio :id="'audio__' + _uid" 
-:src="track.preview_url" 
-v-if="track.preview_url" 
-controls/>
-
-    </div>
+  </div>
 </template>
 
 <script>
+import { mapMutations } from 'vuex';
 export default {
 
   name: 'TrackListing',
@@ -24,17 +20,33 @@ export default {
       type: Object,
       default: () => {
         return {
+          id: 'asdf',
           name: 'Default Name',
+          artists: [
+            {
+              id: 'fdsa',
+              name: 'Artist Name',
+            },
+          ],
+          album: {
+            name: 'Album Name',
+            images: [
+              {
+                url: '',
+              },
+            ],
+          },
         };
       },
     },
   },
 
-  data () {
-    return {
-
-    };
+  methods: {
+    ...mapMutations([
+      'playTrack',
+    ]),
   },
+
 };
 </script>
 

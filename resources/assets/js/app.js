@@ -36,6 +36,7 @@ const store = new Vuex.Store({
     isPlaying: false,
     currentPlaylist: [],
     searchResults: [],
+    currentTrack: undefined,
   },
   
   mutations: {
@@ -44,6 +45,11 @@ const store = new Vuex.Store({
     },
     pause (state) {
       state.isPlaying = false;
+    },
+    playTrack(state, track) {
+      state.currentTrack = track;
+      state.isPlaying = true;
+      state.searchResults = [];
     },
     setPlaylist (state, playList) {
       state.currentPlaylist = playList;
