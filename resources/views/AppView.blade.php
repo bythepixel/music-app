@@ -12,7 +12,6 @@
 </head>
 
 <body data-access-token="{{ $accessToken }}" data-access-token-expiration="{{ $accessTokenExpiration }}">
-	<h1>Hello, World!</h1>
 	<div id="app"></div>
 </body>
 

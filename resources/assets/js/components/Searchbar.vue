@@ -1,7 +1,13 @@
 <template>
   <div>
-    <input type="search" v-model="query" >
-    <button @click="search(query)">Search</button>
+    <form class="search" @submit="search">
+      <font-awesome-icon icon="search" class="search__icon" />
+      <input class="search__input"
+        type="search"
+        v-model="query"
+        placeholder="Search"
+        >
+    </form>
     <ul class="search__results-list">
       <TrackListing v-for="track in tracks" :key="track.id" :track="track" />
     </ul>
@@ -9,6 +15,7 @@
 </template>
 
 <script>
+import FontAwesomeIcon from '@fortawesome/vue-fontawesome';
 import TrackListing from './TrackListing';
 export default {
 
@@ -16,6 +23,7 @@ export default {
 
   components: {
     TrackListing,
+    FontAwesomeIcon,
   },
 
   data () {
@@ -26,11 +34,12 @@ export default {
   },
 
   methods: {
-    search(query) {
+    search(e) {
+      e.preventDefault();
       this.$spotifyHttp
         .get('search', {
           params: {
-            q: query,
+            q: this.query,
             type: 'track',
           },
         })
@@ -43,20 +52,30 @@ export default {
 };
 </script>
 
-<style lang="css">
+<style lang="scss">
+@import '../../sass/variables/variables';
 
-.album-image {
-  width: 40px;
-  margin-right: 1rem;
-}
+.search {
+  display: flex;
+  align-items: center;
+  position: relative;
 
-.search__results-list {
-  list-style: none;
-  text-align: left;
-}
+  .search__icon {
+    position: absolute;
+    left: 1rem;
+  }
 
-audio {
-  align-self: flex-end;
+  .search__input {
+    width: 100%;
+    background-color: $color__bg-color;
+    border: none;
+    color: lighten(invert($color__bg-color), 40%);
+    padding: 1rem 1rem 1rem 3rem;
+
+    &:hover, &:focus {
+      background-color: lighten($color__bg-color, 10%);
+    }
+  }
 }
 
 </style>
