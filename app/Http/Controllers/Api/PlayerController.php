@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Events\PlayerPause;
+use App\Events\PlayerPlay;
+use App\Events\TestEvent;
 use Illuminate\Cache\Repository;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Http\Request;
@@ -9,6 +12,7 @@ use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use SpotifyWebAPI\SpotifyWebAPI;
+use SpotifyWebAPI\SpotifyWebAPIException;
 
 class PlayerController extends BaseController
 {
@@ -25,18 +29,13 @@ class PlayerController extends BaseController
         return response()->json($spotifyApi->getMyDevices());
     }
 
-    public function playlist(SpotifyWebAPI $spotifyApi, Repository $cache)
+    public function getPlaylist(SpotifyWebAPI $spotifyApi, Repository $cache)
     {
         $playlistId = $this->getPlaylistId($spotifyApi, $cache);
 
-        $tracks = $spotifyApi->getUserPlaylistTracks($spotifyApi->me()->id, $playlistId);
+        $result = $spotifyApi->getUserPlaylistTracks($spotifyApi->me()->id, $playlistId);
 
-        dump($tracks);
-    }
-
-    public function activeSong(SpotifyWebAPI $spotifyApi)
-    {
-
+        return response()->json($result);
     }
 
     public function addTrack(SpotifyWebAPI $spotifyWebAPI, Repository $cache, Request $request)
@@ -50,17 +49,64 @@ class PlayerController extends BaseController
         return response()->json(['success' => true]);
     }
 
+
     public function play(SpotifyWebAPI $spotifyWebAPI, Repository $cache)
+    {
+        try {
+            $spotifyWebAPI->play(self::DEVICE_ID);
+        } catch (SpotifyWebAPIException $exception) {
+
+            // we can get an error if not paused, this is ok.. just  move on
+            if($exception->getMessage() === 'Command failed: Not paused') {
+                return response()->json(['success' => false]);
+            }
+
+            throw $exception;
+        }
+
+        $cache->put('player.state', 'playing');
+
+        event(new PlayerPlay());
+
+        return response()->json(['success' => true]);
+    }
+
+
+    public function pause(SpotifyWebAPI $spotifyWebAPI, Repository $cache)
+    {
+        try {
+            $spotifyWebAPI->pause(self::DEVICE_ID);
+        } catch (SpotifyWebAPIException $exception) {
+
+            // we can get an error if already paused, this is ok.. just  move on
+            if($exception->getMessage() === 'Command failed: Already paused') {
+                return response()->json(['success' => false]);
+            }
+
+            throw $exception;
+        }
+
+        $cache->put('player.state', 'paused');
+
+        event(new PlayerPause());
+
+        return response()->json(['success' => true]);
+    }
+
+    public function startPlaylist(SpotifyWebAPI $spotifyWebAPI, Repository $cache)
     {
         $spotifyWebAPI->play(self::DEVICE_ID, [
             'context_uri' => 'spotify:user:' . $spotifyWebAPI->me()->id . ':playlist:' . $this->getPlaylistId($spotifyWebAPI, $cache)
         ]);
     }
 
-    public function pause(SpotifyWebAPI $spotifyWebAPI, Repository $cache)
+    public function getState(SpotifyWebAPI $spotifyWebAPI)
     {
-        $spotifyWebAPI->pause(self::DEVICE_ID);
+        $result = $spotifyWebAPI->getMyCurrentPlaybackInfo();
+
+        return response()->json($result);
     }
+
 
     private function getPlaylistId(SpotifyWebAPI $spotifyApi, Repository $cache)
     {
