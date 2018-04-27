@@ -64,8 +64,16 @@ class SpotifyAuthController extends BaseController
         $cache->put('refreshToken', $spotifySession->getRefreshToken(), 9999999);
     }
 
-    public function getNewAccessToken()
+    public function refreshAccessToken(Session $spotifySession, Repository $cache)
     {
-        
+        $spotifySession->refreshAccessToken($cache->get('refreshToken'));
+
+        $cache->put('accessToken', $spotifySession->getAccessToken(), 9999999);
+        $cache->put('accessTokenExpiration', $spotifySession->getTokenExpiration(), 9999999);
+
+        return response()->json([
+            'accessToken' => $cache->get('accessToken'),
+            'accessTokenExpiration' => $cache->get('accessTokenExpiration')
+        ]);
     }
 }
