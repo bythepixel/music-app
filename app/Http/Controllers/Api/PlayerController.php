@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Events\PlayerPause;
 use App\Events\PlayerPlay;
+use App\Events\PlayerPlaylistUpdated;
 use App\Events\PlayerPlayTrack;
 use App\Events\TestEvent;
 use Illuminate\Cache\Repository;
@@ -47,6 +48,8 @@ class PlayerController extends BaseController
             $this->getPlaylistId($spotifyWebAPI, $cache),
             $request->get('id')
         );
+
+        event(new PlayerPlaylistUpdated());
 
         return response()->json(['success' => true]);
     }
