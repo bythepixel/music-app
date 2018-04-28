@@ -8,6 +8,7 @@ Route::get('/player/getState', 'Api\PlayerController@getState');
 Route::get('/player/play', 'Api\PlayerController@play');
 Route::get('/player/pause', 'Api\PlayerController@pause');
 Route::get('/player/playTrack', 'Api\PlayerController@playTrack');
+Route::get('/player/startPlaylist', 'Api\PlayerController@startPlaylist');
 
 Route::get('/spotifyAuth', 'Api\SpotifyAuthController@index');
 Route::get('/spotifyAuth/processAuthCallback', 'Api\SpotifyAuthController@processAuthCallback');

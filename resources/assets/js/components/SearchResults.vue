@@ -1,21 +1,21 @@
 <template>
   <div>
     <ul>
-      <TrackListing v-for="track in songList" :key="track.id" :track="track.track" />
+      <SearchResult v-for="track in songList" :key="track.id" :track="track" />
     </ul>
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex';
-import TrackListing from './TrackListing';
+import SearchResult from './SearchResult';
 
 export default {
 
   name: 'SearchResults',
 
   components: {
-    TrackListing,
+    SearchResult,
   },
 
   computed: {

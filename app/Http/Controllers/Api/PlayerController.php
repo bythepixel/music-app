@@ -22,8 +22,7 @@ class PlayerController extends BaseController
 
     // roeland macbook d728d80cedc1399cdffbe3a56ca729ed85f7201e
     // stereo f57307345802771da1880738d5e81396173c627e
-    // 47eebff6f1480f48a2961b44220a58e608d7135d
-    const DEVICE_ID = '47eebff6f1480f48a2961b44220a58e608d7135d';
+    const DEVICE_ID = '10a38f67e35b8bd5b42b1a1d48a902cf65815d68';
 
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
@@ -68,8 +67,6 @@ class PlayerController extends BaseController
 
             throw $exception;
         }
-
-        $cache->put('player.state', 'playing');
 
         event(new PlayerPlay());
 

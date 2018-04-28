@@ -9,21 +9,24 @@
         >
     </form>
     <ul class="search__results-list">
-      <TrackListing v-for="track in tracks" :key="track.id" :track="track" />
+      <SearchResult v-for="track in tracks"
+      :key="track.id"
+      :track="track"
+      @click="playTrack(track)" />
     </ul>
   </div>
 </template>
 
 <script>
 import FontAwesomeIcon from '@fortawesome/vue-fontawesome';
-import TrackListing from './TrackListing';
+import SearchResult from './SearchResult';
 import { mapActions } from 'vuex';
 export default {
 
   name: 'Searchbar',
 
   components: {
-    TrackListing,
+    SearchResult,
     FontAwesomeIcon,
   },
 

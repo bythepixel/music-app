@@ -21,8 +21,6 @@ window.Echo = new Echo({
 });
 
 
-
-
 /**
  * Add All FontAwesome Solid Icons.
  * This can be trimmed down later to make or bundle smaller.
@@ -63,7 +61,6 @@ const store = new Vuex.Store({
     },
     playTrack(state, track) {
       state.currentTrack = track;
-      state.isPlaying = true;
       state.searchResults = [];
     },
     setPlaylist (state, playList) {
@@ -78,31 +75,86 @@ const store = new Vuex.Store({
     setPlaylist({ commit }, tracks) {
       commit('setPlaylist', tracks);
     },
-    getPlaylist({ commit }) {
-      SpotifyService
-        .search('u2')
-        .then(tracks => commit('setPlaylist', tracks));
-    },
+
     getSearchResults({ commit }, query) {
       SpotifyService
         .search(query)
-        .then(tracks => commit('setSearchResults', tracks));
+        .then(tracks => {
+          commit('setSearchResults', tracks);
+        });
     },
+
     play({ commit }) {
       axios.get('/api/player/play').then(() => {
         commit('play');
       });
     },
+
     pause({ commit }) {
       axios.get('/api/player/pause').then(() => {
         commit('pause');
       });
     },
+
+    addTrack({ commit }, track) {
+      commit('setSearchResults', []);
+      return axios.get('/api/player/addTrack', {
+        params: {
+          id: track.id,
+        },
+      });
+    },
+
+    getPlaylist({ commit }) {
+      return axios.get('/api/player/getPlaylist').then((res) => {
+        commit('setPlaylist', res.data.items);
+      });
+    },
+
+    playTrack({ commit }, track) {
+      axios.get('/api/player/playTrack', {
+        params: {
+          id: track.id,
+        },
+      }).then(() => {
+        commit('play');
+        commit('playTrack', track);
+      });
+    },
+
+    getState({ commit }) {
+      axios.get('/api/player/getState')
+        .then((resp) => {
+          if (resp.data.is_playing) {
+            commit('play');
+            commit('playTrack', resp.data.item);
+          }
+          else {
+            commit('pause');
+            commit('playTrack', resp.data.item);
+          }
+        });
+    },
   },
 
 });
 
-// store.dispatch('getPlaylist');
+window.Echo.channel('music-app')
+  .listen('.player.play', () => {
+    store.dispatch('play');
+  });
+
+window.Echo.channel('music-app')
+  .listen('.player.pause', () => {
+    store.dispatch('pause');
+  });
+
+window.Echo.channel('music-app')
+  .listen('.player.playlistUpdated', () => {
+    store.dispatch('getPlaylist');
+  });
+  
+store.dispatch('getState');
 
 const app = new Vue({
   el: '#app',

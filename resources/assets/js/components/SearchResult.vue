@@ -1,5 +1,5 @@
 <template>
-  <div class="search__result" @click="playTrack(track)" >
+  <div class="search__result" @click="addTrack(track)" >
     <img class="track__image" :src="track.album.images[0].url" >
     <div>
       <div class="track__name">{{ track.name }}</div>
@@ -13,7 +13,7 @@
 import { mapActions } from 'vuex';
 export default {
 
-  name: 'TrackListing',
+  name: 'SearchResult',
 
   props: {
     track: {
@@ -21,7 +21,7 @@ export default {
       default: () => {
         return {
           id: 'asdf',
-          name: 'Default Name',
+          name: 'Defaults Name',
           artists: [
             {
               id: 'fdsa',
@@ -43,7 +43,8 @@ export default {
 
   methods: {
     ...mapActions([
-      'playTrack',
+      'addTrack',
+      'getPlaylist',
     ]),
   },
 
