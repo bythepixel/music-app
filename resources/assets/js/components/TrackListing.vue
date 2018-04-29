@@ -1,9 +1,13 @@
 <template>
-  <div class="search__result" @click="playTrack(track)" >
+  <div class="search__result">
     <img class="track__image" :src="track.album.images[0].url" >
-    <div>
+    <div class="track__details">
       <div class="track__name">{{ track.name }}</div>
       <div class="track__artist-name">{{ track.artists[0].name }}</div>
+    </div>
+    
+    <div class="track__actions">
+      <slot></slot>
     </div>
     
   </div>
@@ -64,9 +68,27 @@ export default {
 
   padding: 0.75rem 0.5rem;
   font-size: 0.9em;
+
+  .track__actions {
+    padding-right: 1rem;
+    opacity: 0;
+    visibility: hidden;
+    transition: transform ease 400ms, opacity ease 200ms, visibility ease 200ms;
+  }
+
+  &:hover, &:focus {
+
+    .track__actions {
+      transition: transform ease 400ms, opacity ease 100ms, visibility ease 100ms;
+      transition-delay: 75ms;
+      opacity: 1;
+      visibility: visible;
+      transform: scale(1.2);
+    }
+  }
 }
 
-.search__result span {
+.search__result .track__details {
   flex: 1 0 auto;
 }
 

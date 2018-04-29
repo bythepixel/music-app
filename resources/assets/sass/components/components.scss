@@ -1,0 +1,33 @@
+.btn {
+	display: inline-block;
+	background-color: transparent;
+	color: invert(lighten($color__bg-color, 10%));
+	border: 2px solid lighten($color__bg-color, 20%);
+	border-radius: 3px;
+	padding: 0.25em;
+	font-size: 1.2rem;
+	text-align: center;
+
+	&:hover, &:focus {
+		color: invert($color__bg-color);
+	}
+
+	&__icon-btn {
+		border-radius: 50%;
+		height: 2em;
+		width: 2em;
+
+		&--large {
+			font-size: 4rem;
+		}
+
+		&--icon-only {
+			border: none;
+			transition: transform ease-out 250ms;
+
+			&:hover, &:focus {
+				transform: scale(1.2);
+			}
+		}
+	}
+}

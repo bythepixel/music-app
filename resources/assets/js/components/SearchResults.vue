@@ -1,27 +1,38 @@
 <template>
   <div>
     <ul>
-      <SearchResult v-for="track in songList" :key="track.id" :track="track" />
+      <TrackListing v-for="track in searchResults" :key="track.id" :track="track">
+        <button class="btn btn__icon-btn--icon-only" @click="addTrack(track)"><font-awesome-icon icon="plus-circle" /></button>
+      </TrackListing>
     </ul>
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex';
-import SearchResult from './SearchResult';
+import { mapActions } from 'vuex';
+import TrackListing from './TrackListing';
+import FontAwesomeIcon from '@fortawesome/vue-fontawesome';
 
 export default {
 
   name: 'SearchResults',
 
   components: {
-    SearchResult,
+    TrackListing,
+    FontAwesomeIcon,
   },
 
   computed: {
     ...mapState({
-      songList: state => state.searchResults,
+      searchResults: state => state.searchResults,
     }),
+  },
+
+  methods: {
+    ...mapActions([
+      'addTrack',
+    ]),
   },
 
 };

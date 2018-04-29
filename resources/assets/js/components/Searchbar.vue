@@ -1,48 +1,51 @@
 <template>
   <div>
-    <form class="search" @submit.prevent="search">
+    <form class="search" @submit.prevent="getSearchResults(query)">
       <font-awesome-icon icon="search" class="search__icon" />
       <input class="search__input"
         type="search"
         v-model="query"
         placeholder="Search"
         >
+      <button v-if="query" type="button" @click="clearSearch()" class="btn btn__icon-btn--icon-only clear__icon" aria-label="clear search"><font-awesome-icon icon="times-circle" /></button>
     </form>
-    <ul class="search__results-list">
-      <SearchResult v-for="track in tracks"
-      :key="track.id"
-      :track="track"
-      @click="playTrack(track)" />
-    </ul>
+    <div class="list-counter" v-if="searchResults.length >= 1">{{ searchResults.length }} songs found</div>
   </div>
 </template>
 
 <script>
 import FontAwesomeIcon from '@fortawesome/vue-fontawesome';
-import SearchResult from './SearchResult';
 import { mapActions } from 'vuex';
+import { mapState } from 'vuex';
 export default {
 
   name: 'Searchbar',
 
   components: {
-    SearchResult,
     FontAwesomeIcon,
   },
 
   data () {
     return {
       tracks: [],
-      query: '',
+      query: undefined,
     };
+  },
+
+  computed: {
+    ...mapState({
+      searchResults: state => state.searchResults,
+    }),
   },
 
   methods: {
     ...mapActions([
       'getSearchResults',
+      'clearSearchResults',
     ]),
-    search() {
-      this.getSearchResults(this.query);
+    clearSearch() {
+      this.query = undefined;
+      this.clearSearchResults();
     },
   },
 
@@ -51,6 +54,12 @@ export default {
 
 <style lang="scss">
 @import '../../sass/variables/variables';
+
+.list-counter {
+  color: lighten($color__bg-color, 40%);
+  font-size: .8em;
+  padding: 0.5rem;
+}
 
 .search {
   display: flex;
@@ -62,6 +71,11 @@ export default {
     left: 1rem;
   }
 
+  .clear__icon {
+    position: absolute;
+    right: 1rem;
+  }
+
   .search__input {
     width: 100%;
     background-color: $color__bg-color;
@@ -71,6 +85,10 @@ export default {
 
     &:hover, &:focus {
       background-color: lighten($color__bg-color, 10%);
+    }
+
+    &:focus {
+      background-color: lighten($color__bg-color, 15%);
     }
   }
 }

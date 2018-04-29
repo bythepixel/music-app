@@ -14,8 +14,17 @@ import Playlist from './Playlist';
 import SearchResults from './SearchResults';
 import { mapState } from 'vuex';
 
+/**
+ * Add All FontAwesome Solid Icons.
+ * This can be trimmed down later to make or bundle smaller.
+ */
+import fontawesome from '@fortawesome/fontawesome';
+import solid from '@fortawesome/fontawesome-free-solid';
+import regular from '@fortawesome/fontawesome-free-regular';
+fontawesome.library.add(regular, solid);
+
 export default {
-  name: 'HelloWorld',
+  name: 'MusicApp',
 
   components: {
     PlayerControls,
@@ -28,11 +37,6 @@ export default {
     ...mapState({
       searchResults: state => state.searchResults,
     }),
-  },
-
-  created() {
-    this.$Echo.channel('music-app')
-      .listen('.my-event', e => console.log(e));
   },
 
 };
